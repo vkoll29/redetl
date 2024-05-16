@@ -1,0 +1,3 @@
+pyyaml
+azure-storage-blob
+pyodbc
