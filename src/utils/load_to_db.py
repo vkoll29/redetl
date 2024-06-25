@@ -16,12 +16,27 @@ def load_data(df, conn, table):
     :param table: the table to load the data into
     :return: None
     """
-    print(f"Loading {len(df)} rows to {table}. Here's the df's dtypes:")
+    print(f"Loading {len(df)} rows to {table}")
     start = time.time()
     cursor = conn.cursor()
     cursor.fast_executemany = True
     vals = count_columns(df)
     insert_stmt = f'INSERT INTO {table} VALUES ({vals})'
+
+    # data_to_insert = df.values.tolist()
+    # # # data_to_insert = [tuple(x) for x in data_to_insert]
+    # for row in data_to_insert:
+    #     try:
+    #         cursor.execute(insert_stmt, row)
+    #         logging.debug(f'Successfully inserted row: {row}')
+    #     except Exception as e:
+    #         logging.debug(f"Error inserting row: {row}. Exception: {e}")
+    #         # conn.rollback()
+    #
+    # cursor.commit()
+    # cursor.close()
+    # conn.close()
+    # print(f"Operation took {time.time() - start} seconds")
 
     try:
 
@@ -52,17 +67,3 @@ def load_data_sa(df, engine, conn, table):
     df.to_sql(table, engine, if_exists='append', chunksize=None)
 
 
-  # data_to_insert = df.values.tolist()
-    # # data_to_insert = [tuple(x) for x in data_to_insert]
-    # for row in data_to_insert:
-    #     try:
-    #         cursor.execute(insert_stmt, row)
-    #         logging.debug(f'Successfully inserted row: {row}')
-    #     except Exception as e:
-    #         logging.debug(f"Error inserting row: {row}. Exception: {e}")
-    #         # conn.rollback()
-    #
-    # cursor.commit()
-    # cursor.close()
-    # conn.close()
-    # print(f"Operation took {time.time() - start} seconds")
