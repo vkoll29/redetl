@@ -51,7 +51,7 @@ def load_data(df, conn, table):
 
     finally:
         cursor.close()
-        conn.close()
+
 
 
 def load_data_sa(df, engine, conn, table):
