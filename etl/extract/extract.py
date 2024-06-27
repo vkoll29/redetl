@@ -70,7 +70,7 @@ def extract_blobs_date(
             #     if i > 10:
             #         break
         print(f"Extracted {ir_type} data in {time.time() - start} seconds")
-        return pd.concat(blob_dfs, axis=0, ignore_index=True)
+        return pd.concat(blob_dfs, axis=0, ignore_index=True) # TODO: Handle cases where there are no blobs found so concat will raise an error
 
     except Exception as e:
         print(f"Error: {e}")
