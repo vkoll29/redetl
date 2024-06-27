@@ -9,8 +9,7 @@ def get_sql_dtype(df):
     :param df: Input DataFrame.
     :return: Modified DataFrame.
     """
-    # Print initial data types
-    print("Initial data types:\n", df.dtypes)
+    # print("Initial data types:\n", df.dtypes)
     for col in df.select_dtypes(exclude=['datetime64[ns]']).columns:
         if col != 'Target Score':  # target score is a float, if converted to str the ingestion will fail
             df[col] = df[col].astype(str)
