@@ -1,9 +1,9 @@
 from etl.transform._add_bottler_column import add_bottler_column
-from src.utils.load_to_db import load_data
-from src.utils.convert_dtypes import get_sql_dtype
+from etl.load.commons import execute_common_ops
 
 
-def transform_actuals(conn, df, container_name):
+def insert_actuals_staging(conn, df, container_name):
+    table = 'IRActualsFacings'
     # step 1: Drop unnecessary columns
     columns_to_drop = [
         'BlockID',
@@ -72,9 +72,12 @@ def transform_actuals(conn, df, container_name):
         'ReProcessedStatus',
         'ReProcessedTime'
     ]
-    df_tf = df.loc[:, new_order]
-    df_tf = get_sql_dtype(df_tf)
+    df = df.loc[:, new_order]
 
-    # step 4: Insert data to staging table
-    print(df_tf.columns)
-    load_data(df_tf, conn, 'stg.stageIRActualsFacings')
+    # Execute common operations
+    execute_common_ops(conn, df, table)
+
+        # df_tf = get_sql_dtype(df_tf)
+        #
+        # # step 4: Insert data to staging table
+        # load_data(df_tf, conn, 'stg.stageIRActualsFacings')

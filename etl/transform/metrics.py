@@ -1,11 +1,12 @@
 from etl.transform._add_bottler_column import add_bottler_column
-from src.utils.load_to_db import load_data
 from src.utils.convert_dtypes import get_sql_dtype
 from src.utils.extract_target_value import get_target_value
 from src.utils.extract_target_score import get_target_score
+from etl.load.commons import execute_common_ops
 
 
-def transform_metrics(conn, df, container_name):
+def metrics_insert_staging(conn, df, container_name):
+    table = 'IRMetricsV2'
     # step 1: Drop unnecessary columns
     columns_to_drop = [
         'ID',
@@ -94,17 +95,8 @@ def transform_metrics(conn, df, container_name):
         'ReProcessedTime'
 
     ]
-    df_tf = df.loc[:, new_order]
+    df = df.loc[:, new_order]
 
-    # step 6: Convert dtypes to SQL types
-    from pprint import pprint
-    pprint(df_tf.dtypes)
-    df_tf = get_sql_dtype(df_tf)
-    print('-----------------------------------------------')
-    print(df_tf['Target Score'].head(10))
+    # Execute common operations
+    execute_common_ops(conn, df, table)
 
-    # step 7: Insert data to staging table
-
-    # pprint(df[['Metrics', 'TargetScore', 'TargetValue']].head(10))
-    # pprint(df_tf.columns)
-    load_data(df_tf, conn, 'stg.stageIRMetricsV2')

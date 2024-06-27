@@ -1,10 +1,11 @@
 from etl.transform._add_bottler_column import add_bottler_column
-from src.utils.load_to_db import load_data
 from src.utils.convert_dtypes import get_sql_dtype
+from etl.load.commons import execute_common_ops
 
 
-def transform_mq(conn, df, container_name):
-    print(df.dtypes)
+def mq_insert_staging(conn, df, container_name):
+
+    table = 'IRManualQuestions'
     # step 1: Drop unnecessary columns
     columns_to_drop = [
         'ID',
@@ -57,8 +58,11 @@ def transform_mq(conn, df, container_name):
     ]
     df = df.loc[:, new_order]
 
-    # step 4: Convert dtypes to SQL types
-    df_tf = get_sql_dtype(df)
+    # Execute common operations
+    execute_common_ops(conn, df, table)
 
-    # step 4: Insert data to staging table
-    load_data(df_tf, conn, 'stg.StageIRManualQuestions')
+        # step 4: Convert dtypes to SQL types
+        # df_tf = get_sql_dtype(df)
+
+        # step 4: Insert data to staging table
+        # load_data(df_tf, conn, 'stg.StageIRManualQuestions')

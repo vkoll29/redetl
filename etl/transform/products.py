@@ -1,11 +1,9 @@
-import pandas as pd
-
 from etl.transform._add_bottler_column import add_bottler_column
-from src.utils.load_to_db import load_data
+from etl.load.load_to_db import load_data
 from src.utils.convert_dtypes import get_sql_dtype
 
 
-def transform_products(conn, df, container_name):
+def insert_products(conn, df, container_name):
 
     # step 1: Drop unnecessary columns
     columns_to_drop = [
@@ -89,6 +87,24 @@ def transform_products(conn, df, container_name):
 
     # step 4: Convert dtypes to SQL types
     df_tf = get_sql_dtype(df)
+
+    # step 5: Prepare table
+    cursor = conn.cursor()
+    bottlers = {
+        'ccba-kenya': 'CCBAKE',
+        'ccba-botsw': 'CCBABW',
+        'ccba-ethio': 'CCBAET',
+        'ccba-tanz': 'CCBATZ',
+        'ccba-mozam': 'CCBAMOZ',
+        'ccbauganda': 'CCBAUG',
+        'ccbazambia': 'CCBAZAM',
+        'ccba-ghana': 'CCBAGHA',
+        'ccbanamibi': 'CCBANAM',
+        'cbl': 'CBL'
+    }
+    bottler = bottlers[container_name]
+    cursor.execute(f"DELETE FROM IRProduct WHERE Bottler= '{bottler}'")
+    cursor.commit()
 
     # step 4: Insert data to staging table
     load_data(df_tf, conn, 'stg.IRProduct')
