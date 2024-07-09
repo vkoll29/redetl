@@ -7,6 +7,7 @@ from src.utils.convert_dtypes import get_sql_dtype
 from src.utils.insert_sa import insert_sa
 from etl.load.prep_landing import prep_landing_table
 from etl.load.clear_staging import clear_staging_table
+from etl.load.commons import execute_common_ops
 
 
 def recon_insert_staging(conn, df, container_name):
@@ -17,9 +18,15 @@ def recon_insert_staging(conn, df, container_name):
     :param container_name: the container name of the dataframe which determines the bottler name
     :return:
     """
+
+    # Check if df is empty
+    if df.empty:
+        print(f"container {container_name} is empty")
+        return
+
     # step 1: Drop unnecessary columns
     table = 'IRReconciliation'
-    df.to_csv(r'./df.csv', index=False)
+    # df.to_csv(r'./df.csv', index=False)
     columns_to_drop = ['PrimaryEmail', 'UserProfile', 'SurveyId', 'IsMetricCalculated', 'UserName',
                        'SurveyFinishReceivedOn', 'ReconSummary']
     df = df.drop(columns_to_drop, axis=1)
@@ -60,24 +67,25 @@ def recon_insert_staging(conn, df, container_name):
         'SliceEndTime',
         'Bottler'
     ]
-    df_tf = df[new_order]
+    df = df[new_order]
+
+    # Execute common operations
+    execute_common_ops(conn, df, table)
+
+    # # step 4: Convert dtypes to SQL types
+    # df_tf = get_sql_dtype(df_tf)
+    # # df_tf.to_csv(r'./df_tf.csv', index=False)
+    #
+    # # step 4: Insert data to staging table
+    # load_data(df_tf, conn, f'stg.stage{table}')
+    #
+    # # step 5: Prepare landing table
+    # prep_landing_table(conn, table)
+    #
+    # # step 6: Insert data to landing table
+    # load_data(df_tf, conn, f'stg.{table}')
+    #
+    # # step 7: Truncate staging table
+    # clear_staging_table(conn, table)
 
 
-    # step 4: Convert dtypes to SQL types
-    df_tf = get_sql_dtype(df_tf)
-    # df_tf.to_csv(r'./df_tf.csv', index=False)
-
-    # step 4: Insert data to staging table
-    load_data(df_tf, conn, f'stg.stage{table}')
-
-    # step 5: Prepare landing table
-    prep_landing_table(conn, table)
-
-    # step 6: Insert data to landing table
-    load_data(df_tf, conn, f'stg.{table}')
-
-    # step 7: Truncate staging table
-    clear_staging_table(conn, table)
-
-    # step 8: close the connection
-    conn.close()
