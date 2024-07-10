@@ -8,6 +8,7 @@ def sessions_insert_staging(conn, df, container_name):
         print(f"container {container_name} is empty")
         return
     table = 'Sessions'
+    table_ts = 'SessionsWtTimestamp'
     # step 1: Drop unnecessary columns
     columns_to_drop = ['ID',
                        'ProgramId',
@@ -41,3 +42,4 @@ def sessions_insert_staging(conn, df, container_name):
 
     # Execute common operations
     execute_common_ops(conn, df, table)
+    execute_common_ops(conn, df, table_ts)
