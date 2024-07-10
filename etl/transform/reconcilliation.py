@@ -19,8 +19,8 @@ def recon_insert_staging(conn, df, container_name):
     :return:
     """
 
-    # Check if df is empty
-    if df.empty:
+    # Check if df is Nonetype
+    if df is None:
         print(f"container {container_name} is empty")
         return
 
@@ -72,20 +72,5 @@ def recon_insert_staging(conn, df, container_name):
     # Execute common operations
     execute_common_ops(conn, df, table)
 
-    # # step 4: Convert dtypes to SQL types
-    # df_tf = get_sql_dtype(df_tf)
-    # # df_tf.to_csv(r'./df_tf.csv', index=False)
-    #
-    # # step 4: Insert data to staging table
-    # load_data(df_tf, conn, f'stg.stage{table}')
-    #
-    # # step 5: Prepare landing table
-    # prep_landing_table(conn, table)
-    #
-    # # step 6: Insert data to landing table
-    # load_data(df_tf, conn, f'stg.{table}')
-    #
-    # # step 7: Truncate staging table
-    # clear_staging_table(conn, table)
 
 

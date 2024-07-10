@@ -4,6 +4,9 @@ from etl.load.commons import execute_common_ops
 
 
 def mq_insert_staging(conn, df, container_name):
+    if df is None:
+        print(f"container {container_name} is empty")
+        return
 
     table = 'IRManualQuestions'
     # step 1: Drop unnecessary columns

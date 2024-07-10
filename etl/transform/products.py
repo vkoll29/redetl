@@ -4,6 +4,9 @@ from src.utils.convert_dtypes import get_sql_dtype
 
 
 def insert_products(conn, df, container_name):
+    if df is None:
+        print(f"container {container_name} is empty")
+        return
 
     # step 1: Drop unnecessary columns
     columns_to_drop = [
@@ -103,7 +106,7 @@ def insert_products(conn, df, container_name):
         'cbl': 'CBL'
     }
     bottler = bottlers[container_name]
-    cursor.execute(f"DELETE FROM IRProduct WHERE Bottler= '{bottler}'")
+    cursor.execute(f"DELETE FROM stg.IRProduct WHERE Bottler= '{bottler}'")
     cursor.commit()
 
     # step 4: Insert data to staging table

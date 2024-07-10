@@ -6,6 +6,9 @@ from etl.load.commons import execute_common_ops
 
 
 def metrics_insert_staging(conn, df, container_name):
+    if df is None:
+        print(f"container {container_name} is empty")
+        return
     table = 'IRMetricsV2'
     # step 1: Drop unnecessary columns
     columns_to_drop = [

@@ -3,6 +3,10 @@ from etl.load.commons import execute_common_ops
 
 
 def inventory_insert_staging(conn, df, container_name):
+    if df is None:
+        print(f"container {container_name} is empty")
+        return
+
     table = 'IRInventoryPricing'
     # step 1: Drop unnecessary columns
     columns_to_drop = [
