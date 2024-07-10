@@ -8,6 +8,8 @@ def insert_products(conn, df, container_name):
         print(f"container {container_name} is empty")
         return
 
+    table = 'dbo.IRProduct'
+
     # step 1: Drop unnecessary columns
     columns_to_drop = [
         'IsEmpty',
@@ -106,8 +108,8 @@ def insert_products(conn, df, container_name):
         'cbl': 'CBL'
     }
     bottler = bottlers[container_name]
-    cursor.execute(f"DELETE FROM stg.IRProduct WHERE Bottler= '{bottler}'")
+    cursor.execute(f"DELETE FROM {table} WHERE Bottler= '{bottler}'")
     cursor.commit()
 
     # step 4: Insert data to staging table
-    load_data(df_tf, conn, 'stg.IRProduct')
+    load_data(df_tf, conn, table)

@@ -7,8 +7,8 @@ def clear_staging_table(conn, base_table_name):
     """
     cursor = conn.cursor()
     try:
-        cursor.execute(f"TRUNCATE TABLE stg.stage{base_table_name}")
+        cursor.execute(f"TRUNCATE TABLE dbo.stage{base_table_name}")
         conn.commit()
-        print(f"stg.stage{base_table_name} truncated")
+        print(f"dbo.stage{base_table_name} truncated")
     except Exception as e:
-        print(f"ERROR TRUNCATING stg.stage{base_table_name}: {e}")
+        print(f"ERROR TRUNCATING dbo.stage{base_table_name}: {e}")

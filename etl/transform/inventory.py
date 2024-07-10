@@ -57,9 +57,3 @@ def inventory_insert_staging(conn, df, container_name):
 
     # Execute common operations
     execute_common_ops(conn, df, table)
-
-        # df_tf = get_sql_dtype(df_tf)
-        #
-        # # step 4: Insert data to staging table
-        # print(df_tf.columns)
-        # load_data(df_tf, conn, 'stg.stageIRInventoryPricing')

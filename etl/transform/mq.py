@@ -1,5 +1,4 @@
 from etl.transform._add_bottler_column import add_bottler_column
-from src.utils.convert_dtypes import get_sql_dtype
 from etl.load.commons import execute_common_ops
 
 
@@ -63,9 +62,3 @@ def mq_insert_staging(conn, df, container_name):
 
     # Execute common operations
     execute_common_ops(conn, df, table)
-
-        # step 4: Convert dtypes to SQL types
-        # df_tf = get_sql_dtype(df)
-
-        # step 4: Insert data to staging table
-        # load_data(df_tf, conn, 'stg.StageIRManualQuestions')

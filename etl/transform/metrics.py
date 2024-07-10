@@ -1,5 +1,4 @@
 from etl.transform._add_bottler_column import add_bottler_column
-from src.utils.convert_dtypes import get_sql_dtype
 from src.utils.extract_target_value import get_target_value
 from src.utils.extract_target_score import get_target_score
 from etl.load.commons import execute_common_ops
