@@ -4,20 +4,24 @@ from etl.load.prep_landing import prep_landing_table
 from etl.load.clear_staging import clear_staging_table
 
 
-def execute_common_ops(conn, df, table):
+def execute_common_ops(conn, df, table, **kwargs):
+    schema = 'dbo'
 
 
     # step 2: Convert dtypes to SQL types
-    df = get_sql_dtype(df)
+    if 'date_columns_to_ignore' in kwargs:
+        df = get_sql_dtype(df, date_columns_to_ignore=kwargs['date_columns_to_ignore'])
+    else:
+        df = get_sql_dtype(df)
 
     # step 3: insert data to staging table
-    load_data(df, conn, f'dbo.stage{table}')
+    load_data(df, conn, f'{schema}.stage{table}')
 
     # step 4: Prepare landing table
     prep_landing_table(conn, table)
 
     # step 5: Insert data to landing table
-    load_data(df, conn, f'dbo.{table}')
+    load_data(df, conn, f'{schema}.{table}')
 
     # step 6: Truncate staging table
     clear_staging_table(conn, table)

@@ -23,6 +23,7 @@ def load_data(df, conn, table):
     vals = count_columns(df)
     insert_stmt = f'INSERT INTO {table} VALUES ({vals})'
 
+    # this script loads individual rows. use it to identify problematic rows
     # data_to_insert = df.values.tolist()
     # # # data_to_insert = [tuple(x) for x in data_to_insert]
     # for row in data_to_insert:
@@ -30,14 +31,14 @@ def load_data(df, conn, table):
     #         cursor.execute(insert_stmt, row)
     #         logging.debug(f'Successfully inserted row: {row}')
     #     except Exception as e:
-    #         logging.debug(f"Error inserting row: {row}. Exception: {e}")
+    #         logging.error(f"Error inserting row: {row}. Exception: {e}")
     #         # conn.rollback()
     #
     # cursor.commit()
-    # cursor.close()
-    # conn.close()
+    #
     # print(f"Operation took {time.time() - start} seconds")
 
+    # this is the actual bulk load script
     try:
 
         # Try batch insert with executemany

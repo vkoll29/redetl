@@ -40,6 +40,10 @@ def sessions_insert_staging(conn, df, container_name):
     # step 2: Add Bottler column
     df = add_bottler_column(df, container_name)
 
+    # Sessions with timestamp take a different approach
+    # insert into sessions wt ts first because you need the original datetime values. the df is held in memory and
+    # any transformations on it will be kept for subsequent operations
+    execute_common_ops(conn, df, table_ts, date_columns_to_ignore=['SessionStartDateTime', 'SessionEndDateTime'])
+
     # Execute common operations
     execute_common_ops(conn, df, table)
-    execute_common_ops(conn, df, table_ts)
