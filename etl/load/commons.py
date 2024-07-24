@@ -1,4 +1,5 @@
 from src.utils.convert_dtypes import get_sql_dtype
+from src.utils.truncate_str_cols import truncate_str
 from etl.load.load_to_db import load_data
 from etl.load.prep_landing import prep_landing_table
 from etl.load.clear_staging import clear_staging_table
@@ -7,7 +8,8 @@ from etl.load.clear_staging import clear_staging_table
 def execute_common_ops(conn, df, table, **kwargs):
     schema = 'dbo'
 
-
+    # step 1: truncate strings
+    df = truncate_str(df)
     # step 2: Convert dtypes to SQL types
     if 'date_columns_to_ignore' in kwargs:
         df = get_sql_dtype(df, date_columns_to_ignore=kwargs['date_columns_to_ignore'])

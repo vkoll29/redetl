@@ -11,13 +11,13 @@ def prep_landing_table(conn, base_table_name):
         cursor.execute(f"""
             DELETE T      
             FROM  
-                stg.{base_table_name} T 
+                dbo.{base_table_name} T 
             INNER JOIN
-                stg.Stage{base_table_name} S ON T.SessionUid = S.SessionUid 
-            --AND M.Bottler = S.Bottler
+                dbo.Stage{base_table_name} S ON T.SessionUid = S.SessionUid 
+          
         """)
         conn.commit()
-        print(f"Successfully deleted rows from {base_table_name}")
+        print(f"Successfully deleted {cursor.rowcount} rows from {base_table_name}")
     except Exception as e:
         print(f"ERROR PREPPING LANDING TABLE: {e}")
     finally:

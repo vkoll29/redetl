@@ -14,7 +14,7 @@ URI = config['account']['uri']
 def extract_blobs_date(
         creds: Tuple[str, str],
         ir_type: str,
-        etl_days: int = 1,
+        etl_days: int = 2,
         stop_days: int = -1,
         **kwargs
 ) -> pd.DataFrame:
@@ -32,9 +32,9 @@ def extract_blobs_date(
             to extract a subset because it is only used to generate the data schema.
         :return: a pandas dataframe of the extracted blob
     """
-
     start_date: datetime.date = (datetime.today() - timedelta(days=etl_days)).date()
     end_date: datetime.date = (datetime.today() - timedelta(days=stop_days)).date()
+    print(start_date)
 
     container, sas = creds
     blobs = []
@@ -52,10 +52,11 @@ def extract_blobs_date(
 
             # print(blob)
             if start_date <= blob.last_modified.date() < end_date:
+                print(blob.name, blob.last_modified)
                 blobs.append(blob_service_client.get_blob_client(container=container, blob=blob))
 
         for blob in blobs:
-            # print(blob.get_blob_properties()['name'], blob.get_blob_properties()['container'])
+            print(blob.get_blob_properties()['name'], blob.get_blob_properties()['container'])
             blob_client = blob_service_client.get_blob_client(container=container, blob=blob.blob_name)
 
             if 'length' in kwargs:
@@ -74,3 +75,4 @@ def extract_blobs_date(
 
     except Exception as e:
         print(f"Error: {e}")
+
