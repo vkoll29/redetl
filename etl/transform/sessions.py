@@ -34,6 +34,8 @@ def sessions_insert_staging(conn, df, container_name):
                        'ManuallyCompletedBy',
                        'ProgramItemReferenceId',
                        'IsRouteCompliance',
+                       'IsTestSurvey',
+                       'ScenesNotAvailable'
                        ]
     df = df.drop(columns_to_drop, axis=1)
 
