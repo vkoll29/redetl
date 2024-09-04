@@ -49,7 +49,11 @@ def metrics_insert_staging(conn, df, container_name):
     condition2 = df['Score'] != "0"
     condition3 = df['Target Score'].str.split(",", expand=True)[1] != "0"
     df = df[condition1 | condition2 | condition3]
+    # step 4b: Filter out Fanta Orange 330MLCAN from Tanzania Aug Eating & Drinking Znz
+    condition4 = ((df['Description'] == 'Fanta Orange 330MLCAN') & (df['Bottler'] == 'CCBATZ'))
+    # df_filtered = df[~condition4]
 
+    df = df[~condition4]
 
     # Step 5: Derive Columns
     # a) TargetValue

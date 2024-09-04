@@ -18,6 +18,7 @@ def get_sql_dtype(df, **kwargs):
     for col in df.columns:
         if pd.api.types.is_datetime64_any_dtype(df[col]):
             # this will only be applicable to sessions_wt_timestamp table
+            # this if block basically means the columns are not converted to date type and instead they keep their datetime value
             if 'date_columns_to_ignore' in kwargs:
                 if col not in kwargs['date_columns_to_ignore']:
                     # the lambda function below ensures that NaT values are replaced with None which SQL will handle as NULL
