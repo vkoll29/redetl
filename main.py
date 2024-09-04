@@ -20,6 +20,7 @@ START = time()
 
 def main(etl_days=2):
     for i, container in enumerate(config['containers']):
+
         c_start = time()
         container_name = config['containers'][container]['name']
         sas = config['containers'][container]['sas']
@@ -55,6 +56,7 @@ def main(etl_days=2):
         # 8. Products
         df_products = extract_blobs_date((container_name, sas), 'IRProduct', etl_days=etl_days)
         insert_products(conn, df_products, container_name)
+
         print(f"Ingesting {container_name.upper()} data took {round((time() - c_start) / 60)} minutes")
     conn.close()
     duration = time() - START
