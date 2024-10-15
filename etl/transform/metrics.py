@@ -68,6 +68,9 @@ def metrics_insert_staging(conn, df, container_name):
 
     # step 5: Remove 0 targets
 
+    # new step: Truncate Description column
+    df['Description'] = df['Description'].str.slice(0, 250)
+
     # step 6: reorder columns
     new_order = [
         'SessionUid',
