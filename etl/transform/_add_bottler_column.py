@@ -1,4 +1,7 @@
-def add_bottler_column(df, container_name):
+import pandas as pd
+
+
+def add_bottler_column(df: pd.DataFrame, container_name):
     bottlers = {
         'ccba-kenya': 'CCBAKE',
         'ccba-botsw': 'CCBABW',
@@ -14,4 +17,3 @@ def add_bottler_column(df, container_name):
     }
     df['Bottler'] = bottlers[container_name]
     return df
-

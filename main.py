@@ -17,6 +17,7 @@ conn = establish_conn()
 
 START = time()
 
+
 def main(etl_days=2, stop_days=-1):
     for i, container in enumerate(config['containers']):
 

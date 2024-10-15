@@ -105,6 +105,7 @@ def insert_products(conn, df, container_name):
         'ccbazambia': 'CCBAZAM',
         'ccba-ghana': 'CCBAGHA',
         'ccbanamibi': 'CCBANAM',
+        'ccba-malaw': 'CCBAMWI',
         'cbl': 'CBL'
     }
     bottler = bottlers[container_name]
