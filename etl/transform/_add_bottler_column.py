@@ -9,6 +9,7 @@ def add_bottler_column(df, container_name):
         'ccbazambia': 'CCBAZAM',
         'ccba-ghana': 'CCBAGHA',
         'ccbanamibi': 'CCBANAM',
+        'ccba-malaw': 'CCBAMWI',
         'cbl': 'CBL'
     }
     df['Bottler'] = bottlers[container_name]
