@@ -1,7 +1,8 @@
-def prep_landing_table(conn, base_table_name):
+def prep_landing_table(conn, schema, base_table_name):
     """
     This function deletes rows from the landing table that have a corresponding row in the staging table.
     It is used to avoid duplicate rows in the landing table. The assumption is there are rows in the landing table that may have been updated from source
+    :param schema: specifies the schema in which the table resides
     :param conn: connection object to the database
     :param base_table_name: name of the table to delete rows from
     :return:
@@ -11,9 +12,9 @@ def prep_landing_table(conn, base_table_name):
         cursor.execute(f"""
             DELETE T      
             FROM  
-                dbo.{base_table_name} T 
+                {schema}.{base_table_name} T 
             INNER JOIN
-                dbo.Stage{base_table_name} S ON T.SessionUid = S.SessionUid 
+                {schema}.Stage{base_table_name} S ON T.SessionUid = S.SessionUid 
           
         """)
         conn.commit()

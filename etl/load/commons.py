@@ -6,7 +6,7 @@ from etl.load.clear_staging import clear_staging_table
 
 
 def execute_common_ops(conn, df, table, **kwargs):
-    schema = 'dbo'
+    schema = 'staging'
 
     # step 1: truncate strings
     df = truncate_str(df)
@@ -20,11 +20,11 @@ def execute_common_ops(conn, df, table, **kwargs):
     load_data(df, conn, f'{schema}.stage{table}')
 
     # step 4: Prepare landing table
-    prep_landing_table(conn, table)
+    prep_landing_table(conn, schema, table)
 
     # step 5: Insert data to landing table
     load_data(df, conn, f'{schema}.{table}')
 
     # step 6: Truncate staging table
-    clear_staging_table(conn, table)
+    clear_staging_table(conn, schema, table)
 
