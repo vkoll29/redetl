@@ -37,7 +37,7 @@ def main(etl_days=2, stop_days=-1):
         df_sessions = extract_blobs_date((container_name, sas), 'IRSession', etl_days=etl_days, stop_days=stop_days)
         sessions_insert_staging(conn, df_sessions, container_name)
 
-        # # 4. Metrics
+        # 4. Metrics
         df_metrics = extract_blobs_date((container_name, sas), 'IRMetrics', etl_days=etl_days, stop_days=stop_days)
         metrics_insert_staging(conn, df_metrics, container_name)
 
@@ -65,3 +65,6 @@ def main(etl_days=2, stop_days=-1):
 
 if __name__ == '__main__':
     main()
+
+
+
