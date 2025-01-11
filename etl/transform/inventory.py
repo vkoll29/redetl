@@ -51,7 +51,8 @@ def inventory_insert_staging(conn, df, container_name):
         'SliceStartTime',
         'SliceEndTime',
         'ReProcessedTime',
-        'ReProcessedStatus'
+        'ReProcessedStatus',
+        'SubClientCode'
     ]
     df = df.loc[:, new_order]
 

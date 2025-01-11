@@ -20,7 +20,7 @@ def recon_insert_staging(conn, df, container_name):
     table = 'IRReconciliation'
     # df.to_csv(r'./df.csv', index=False)
     columns_to_drop = ['PrimaryEmail', 'UserProfile', 'SurveyId', 'IsMetricCalculated', 'UserName',
-                       'SurveyFinishReceivedOn', 'ReconSummary']
+                       'SurveyFinishReceivedOn']
     df = df.drop(columns_to_drop, axis=1)
 
     # step 2: Add Bottler column

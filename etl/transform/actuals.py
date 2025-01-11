@@ -73,7 +73,8 @@ def insert_actuals_staging(conn, df, container_name):
         'Position',
         'StockPos',
         'ReProcessedStatus',
-        'ReProcessedTime'
+        'ReProcessedTime',
+        'SubClientCode'
     ]
     df = df.loc[:, new_order]
 

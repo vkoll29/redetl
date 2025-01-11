@@ -10,18 +10,12 @@ def scenes_insert_staging(conn, df, container_name):
     table = 'IRScenes'
     # step 1: Drop unnecessary columns
     columns_to_drop = [
-        'StitchedImageURL',
-        'RawImagePath',
-        'RawImageNames',
         'ImageQuality',
         'ReExportStatus',
         'ReExportTime',
-        'ParentSceneUid',
-        'ImageCount',
         'AssetSerialNumber',
         'AssetEquipmentNumber',
         'SceneCollectionMode',
-        'IsFacingAvailable',
         'IsSelfValidated',
         'IsClientValidated',
         'IrImageUsable'
@@ -48,6 +42,13 @@ def scenes_insert_staging(conn, df, container_name):
         'Bottler',
         'ReProcessedTime',
         'ReProcessedStatus',
+        'StitchedImageURL',
+        'RawImagePath',
+        'RawImageNames',
+        'ParentSceneUid',
+        'ImageCount',
+        'IsFacingAvailable',
+        'SubClientCode'
     ]
 
     df = df.loc[:, new_order]

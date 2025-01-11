@@ -8,7 +8,7 @@ def insert_products(conn, df, container_name):
         print(f"container {container_name} is empty")
         return
 
-    table = 'dbo.IRProduct'
+    table = 'staging.IRProduct'
 
     # step 1: Drop unnecessary columns
     columns_to_drop = [

@@ -31,6 +31,7 @@ def mq_insert_staging(conn, df, container_name):
     new_order = [
         'SessionUID',
         'SceneUID',
+        'SubClientCode',
         'SceneType',
         'SubSceneType',
         'ProgramID',
@@ -56,7 +57,8 @@ def mq_insert_staging(conn, df, container_name):
         'ReProcessedStatus',
         'Bottler',
         'EvidenceImageName',
-        'EvidenceImageURL'
+        'EvidenceImageURL',
+        'QuestionGroup'
     ]
     df = df.loc[:, new_order]
 

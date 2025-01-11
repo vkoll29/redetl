@@ -12,9 +12,7 @@ def sessions_insert_staging(conn, df, container_name):
     # step 1: Drop unnecessary columns
     columns_to_drop = ['ID',
                        'ProgramId',
-                       'ProgramName',
-                       'ProgramItemId',
-                       'ProgramItemName',
+
                        'PrimaryEmail',
                        'UserProfile',
                        'CancelEvidenceImageUrl',
@@ -25,22 +23,53 @@ def sessions_insert_staging(conn, df, container_name):
                        'ReProcessedTime',
                        'UserName',
                        'SessionSource',
-                       'SessionEndLatitude',
-                       'SessionEndLongitude',
                        'LastCorrectedOn',
                        'LastCorrectedBy',
                        'ClientReferenceID',
                        'ManuallyCompletedOn',
                        'ManuallyCompletedBy',
-                       'ProgramItemReferenceId',
-                       'IsRouteCompliance',
-                       'IsTestSurvey',
-                       'ScenesNotAvailable'
+
                        ]
     df = df.drop(columns_to_drop, axis=1)
 
     # step 2: Add Bottler column
     df = add_bottler_column(df, container_name)
+
+    # step 3: reorder columns
+    new_order = [
+        'SessionUId',
+        'SessionStartDateTime',
+        'SessionEndDateTime',
+        'ClientCode',
+        'SubClientCode',
+        'OutletCode',
+        'OutletName',
+        'CountryCode',
+        'UserID',
+        'SessionStatusCode',
+        'SessionStatus',
+        'Latitude',
+        'Longitude',
+        'CancelCallNote',
+        'CancelCallReason',
+        'CreatedOnTime',
+        'LastModifiedTime',
+        'FileCreatedTime',
+        'SliceStartTime',
+        'SliceEndTime',
+        'Bottler',
+        'ProgramName',
+        'ProgramItemId',
+        'ProgramItemName',
+        'ProgramItemReferenceId',
+        'SessionEndLatitude',
+        'SessionEndLongitude',
+        'IsRouteCompliance',
+        'IsTestSurvey',
+        'ScenesNotAvailable',
+    ]
+
+    df = df.loc[:, new_order]
 
     # Sessions with timestamp take a different approach
     # insert into sessions wt ts first because you need the original datetime values. the df is held in memory and

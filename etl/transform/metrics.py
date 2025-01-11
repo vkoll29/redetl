@@ -8,20 +8,16 @@ def metrics_insert_staging(conn, df, container_name):
     if df is None:
         print(f"container {container_name} is empty")
         return
-    table = 'IRMetricsV2'
+    table = 'IRMetrics'
     # step 1: Drop unnecessary columns
     columns_to_drop = [
         'ID',
-        'ReExportStatus',
-        'ReExportTime',
+
         'PeriodStartDate',
         'PeriodEndDate',
         'SubPeriodStartDate',
         'SubPeriodEndDate',
-        'MetricGroupId',
-        'MetricGroupName',
-        'Expression',
-        'ProgramItemReferenceId'
+
     ]
     df = df.drop(columns_to_drop, axis=1)
 
@@ -101,8 +97,14 @@ def metrics_insert_staging(conn, df, container_name):
         'Target Score',
         'Target Value',
         'ReProcessedStatus',
-        'ReProcessedTime'
-
+        'ReProcessedTime',
+        'ReExportStatus',
+        'ReExportTime',
+        'MetricGroupId',
+        'MetricGroupName',
+        'Expression',
+        'ProgramItemReferenceId',
+        'SubClientCode'
     ]
     df = df.loc[:, new_order]
 
