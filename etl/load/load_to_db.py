@@ -40,19 +40,29 @@ def load_data(df, conn, table):
 
     # this is the actual bulk load script
     try:
+        #
+        # # Try batch insert with executemany
+        # cursor.executemany(insert_stmt, df.values.tolist())
+        # cursor.commit()
+        # print(f"{cursor.rowcount} rows inserted")
+        # print(f"Time taken to write to db: {time.time() - start}")
 
-        # Try batch insert with executemany
-        cursor.executemany(insert_stmt, df.values.tolist())
-        cursor.commit()
-        print(f"{cursor.rowcount} rows inserted")
-        print(f"Time taken to write to db: {time.time() - start}")
+        # split df into chunks of 800k rows
+        if len(df) > 800000:
+            chunks = [df.iloc[i:i + 800000] for i in range(0, len(df), 800000)]
+        else:
+            chunks = [df]
+        for i, chunk in enumerate(chunks):
+            cursor.executemany(insert_stmt, chunk.values.tolist())
+            cursor.commit()
+            print(f"{cursor.rowcount} rows inserted for chunk {i + 1} of {len(chunks)}")
+            print(f"Time taken to write to db: {time.time() - start}")
 
     except Exception as ex:
         print(f'Batch insert failed. Time taken is {time.time() - start}.\n  Exception: {ex}')
 
     finally:
         cursor.close()
-
 
 
 def load_data_sa(df, engine, conn, table):
@@ -66,5 +76,3 @@ def load_data_sa(df, engine, conn, table):
 
     S = time.time()
     df.to_sql(table, engine, if_exists='append', chunksize=None)
-
-
