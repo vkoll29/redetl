@@ -35,9 +35,10 @@ def sessions_insert_staging(conn, df, container_name):
                        'ProgramItemReferenceId',
                        'IsRouteCompliance',
                        'IsTestSurvey',
-                       'ScenesNotAvailable'
+                       'ScenesNotAvailable',
+                       'SurveyOutsideGeofence'
                        ]
-    df = df.drop(columns_to_drop, axis=1)
+    df = df.drop(columns_to_drop, errors="ignore", axis=1)
 
     # step 2: Add Bottler column
     df = add_bottler_column(df, container_name)
