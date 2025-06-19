@@ -18,7 +18,7 @@ conn = establish_conn()
 START = time()
 
 
-def main(etl_days=2, stop_days=-1):
+def main(etl_days=1, stop_days=-1):
     for i, container in enumerate(config['containers']):
 
         c_start = time()
@@ -33,7 +33,7 @@ def main(etl_days=2, stop_days=-1):
         df_scenes = extract_blobs_date((container_name, sas), 'IRScenes', etl_days=etl_days, stop_days=stop_days)
         scenes_insert_staging(conn, df_scenes, container_name)
 
-        # 3. Sessions
+        #3. Sessions
         df_sessions = extract_blobs_date((container_name, sas), 'IRSession', etl_days=etl_days, stop_days=stop_days)
         sessions_insert_staging(conn, df_sessions, container_name)
 
@@ -64,7 +64,7 @@ def main(etl_days=2, stop_days=-1):
 
 
 if __name__ == '__main__':
-    main()
+    main(2)
 
 
 

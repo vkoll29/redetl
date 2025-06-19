@@ -34,7 +34,7 @@ def extract_blobs_date(
     """
     start_date: datetime.date = (datetime.today() - timedelta(days=etl_days)).date()
     end_date: datetime.date = (datetime.today() - timedelta(days=stop_days)).date()
-    print(start_date)
+    print(start_date, end_date)
 
     container, sas = creds
     blobs = []
@@ -52,11 +52,11 @@ def extract_blobs_date(
 
             # print(blob)
             if start_date <= blob.last_modified.date() < end_date:
-                print(blob.name, blob.last_modified)
+                #print(blob.name, blob.last_modified)
                 blobs.append(blob_service_client.get_blob_client(container=container, blob=blob))
 
         for blob in blobs:
-            print(blob.get_blob_properties()['name'], blob.get_blob_properties()['container'])
+            #print(blob.get_blob_properties()['name'], blob.get_blob_properties()['container'])
             blob_client = blob_service_client.get_blob_client(container=container, blob=blob.blob_name)
 
             if 'length' in kwargs:
