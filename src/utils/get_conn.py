@@ -18,7 +18,7 @@ def establish_conn():
         - declare config as a variable in the function. then pass the file name as a parameter.
     """
     conn_str = (
-        f"DRIVER={{ODBC Driver 18 for SQL Server}};"
+        f"DRIVER={{ODBC Driver 17 for SQL Server}};"
         f"SERVER={config['db']['server']};"
         f"DATABASE={config['db']['instance']};"
         f"UID={config['db']['username']};"
