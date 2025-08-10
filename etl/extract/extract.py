@@ -45,18 +45,19 @@ def extract_blobs_date(
         blob_service_client = BlobServiceClient(account_url=URI, credential=sas)
         # create a container instance
         container_client = blob_service_client.get_container_client(container)
-        ir_blobs = container_client.list_blobs(name_starts_with=f"V2/Data/{ir_type}/") # added the slash to the end of the folder name to separe IRActual from IRActualPrice
+        ir_blobs = container_client.list_blobs(
+            name_starts_with=f"V2/Data/{ir_type}/")  # added the slash to the end of the folder name to separe IRActual from IRActualPrice
 
         # this extracts blobs based on last modified date i.e. within the start and end dates exclusive of end date
         for blob in ir_blobs:
 
             # print(blob)
             if start_date <= blob.last_modified.date() < end_date:
-                #print(blob.name, blob.last_modified)
+                # print(blob.name, blob.last_modified)
                 blobs.append(blob_service_client.get_blob_client(container=container, blob=blob))
 
         for blob in blobs:
-            #print(blob.get_blob_properties()['name'], blob.get_blob_properties()['container'])
+            # print(blob.get_blob_properties()['name'], blob.get_blob_properties()['container'])
             blob_client = blob_service_client.get_blob_client(container=container, blob=blob.blob_name)
 
             if 'length' in kwargs:
@@ -71,8 +72,8 @@ def extract_blobs_date(
             #     if i > 10:
             #         break
         print(f"Extracted {ir_type} data in {time.time() - start} seconds")
-        return pd.concat(blob_dfs, axis=0, ignore_index=True) # TODO: Handle cases where there are no blobs found so concat will raise an error
+        return pd.concat(blob_dfs, axis=0,
+                         ignore_index=True)  # TODO: Handle cases where there are no blobs found so concat will raise an error
 
     except Exception as e:
         print(f"Error: {e}")
-

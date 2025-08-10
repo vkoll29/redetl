@@ -17,7 +17,6 @@ conn = establish_conn()
 
 START = time()
 
-
 def main(etl_days=1, stop_days=-1):
     for i, container in enumerate(config['containers']):
 
@@ -64,7 +63,7 @@ def main(etl_days=1, stop_days=-1):
 
 
 if __name__ == '__main__':
-    main(2)
+    main()
 
 
 
