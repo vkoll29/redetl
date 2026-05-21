@@ -2,7 +2,7 @@ import io
 from typing import Tuple
 from datetime import datetime, timedelta
 import pandas as pd
-from azure.storage.blob import BlobServiceClient
+from azure.storage.filedatalake import DataLakeServiceClient
 import time
 
 from src.utils.get_config import __load_config
@@ -42,36 +42,36 @@ def extract_blobs_date(
     start = time.time()
     try:
         # create blob service client for interacting with blob storage
-        blob_service_client = BlobServiceClient(account_url=URI, credential=sas)
-        # create a container instance
-        container_client = blob_service_client.get_container_client(container)
-        ir_blobs = container_client.list_blobs(
-            name_starts_with=f"V2/Data/{ir_type}/")  # added the slash to the end of the folder name to separe IRActual from IRActualPrice
+        # blob_service_client = BlobServiceClient(account_url=URI, credential=sas)
+        service_client = DataLakeServiceClient(account_url=URI,credential=sas)
+        filesystem_client = service_client.get_file_system_client(container)
+        paths = filesystem_client.get_paths(path=f"V2/Data/{ir_type}/", recursive=True)
+        for path in paths:
+            if path.is_directory:
+                continue
 
-        # this extracts blobs based on last modified date i.e. within the start and end dates exclusive of end date
-        for blob in ir_blobs:
-
-            # print(blob)
-            if start_date <= blob.last_modified.date() < end_date:
-                # print(blob.name, blob.last_modified)
-                blobs.append(blob_service_client.get_blob_client(container=container, blob=blob))
-
-        for blob in blobs:
-            # print(blob.get_blob_properties()['name'], blob.get_blob_properties()['container'])
-            blob_client = blob_service_client.get_blob_client(container=container, blob=blob.blob_name)
+            last_modified = path.last_modified.date()
+            if not start_date <= last_modified <= end_date:
+                continue
+            print(f"Reading: {path.name}")
+            file_client = filesystem_client.get_file_client(path.name)
+            download = file_client.download_file()
 
             if 'length' in kwargs:
-                blob_content = blob_client.download_blob(offset=0, length=kwargs['length']).readall()
+                blob_content = download.read(kwargs['length'])
             else:
-                blob_content = blob_client.download_blob().readall()
+                blob_content = download.readall()
+
+            print(f"Downloaded {len(blob_content)} bytes")
+
+            if len(blob_content) == 0:
+                print(f"WARNING: Skipping empty file: {path.name}")
+                continue
 
             df = pd.read_parquet(io.BytesIO(blob_content))
             blob_dfs.append(df)
-            # for i, row in df.iterrows():
-            #     print(row)
-            #     if i > 10:
-            #         break
-        print(f"Extracted {ir_type} data in {time.time() - start} seconds")
+
+        print(f"Extracted {ir_type} data in {time.time() - start:.2f} seconds")
         return pd.concat(blob_dfs, axis=0,
                          ignore_index=True)  # TODO: Handle cases where there are no blobs found so concat will raise an error
 

@@ -22,7 +22,7 @@ def establish_conn():
         f"SERVER={config['db']['server']};"
         f"DATABASE={config['db']['instance']};"
         f"UID={config['db']['username']};"
-        f"PWD={config['db']['pw']}"
+        f"PWD={{{config['db']['pw']}}}"
     )
 
     try:
@@ -40,7 +40,7 @@ def sa_engine():
         f"SERVER={config['db']['server']};"
         f"DATABASE={config['db']['instance']};"
         f"UID={config['db']['username']};"
-        f"PWD={config['db']['pw']}"
+        f"PWD={{{config['db']['pw']}}}"
     )
     quoted = quote_plus(conn_str)
     sa_conn = f"mssql+pyodbc:///?odbc_connect={quoted}"

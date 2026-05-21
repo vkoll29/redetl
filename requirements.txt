@@ -4,3 +4,4 @@ pyodbc
 pandas
 pyarrow
 sqlalchemy
+azure-storage-file-datalake
