@@ -48,8 +48,8 @@ def load_data(df, conn, table):
         # print(f"Time taken to write to db: {time.time() - start}")
 
         # split df into chunks of 800k rows
-        if len(df) > 800000:
-            chunks = [df.iloc[i:i + 800000] for i in range(0, len(df), 800000)]
+        if len(df) > 100000:
+            chunks = [df.iloc[i:i + 100000] for i in range(0, len(df), 100000)]
         else:
             chunks = [df]
         for i, chunk in enumerate(chunks):

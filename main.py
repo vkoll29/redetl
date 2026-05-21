@@ -40,10 +40,6 @@ def main(etl_days=1, stop_days=-1):
         df_metrics = extract_blobs_date((container_name, sas), 'IRMetrics', etl_days=etl_days, stop_days=stop_days)
         metrics_insert_staging(conn, df_metrics, container_name)
 
-        # 5. Actuals
-        df_actuals = extract_blobs_date((container_name, sas), 'IRActual', etl_days=etl_days, stop_days=stop_days)
-        insert_actuals_staging(conn, df_actuals, container_name)
-
         # 6. Inventory
         df_inventory = extract_blobs_date((container_name, sas), 'IRInventoryPricing', etl_days=etl_days, stop_days=stop_days)
         inventory_insert_staging(conn, df_inventory, container_name)
@@ -56,6 +52,10 @@ def main(etl_days=1, stop_days=-1):
         df_products = extract_blobs_date((container_name, sas), 'IRProduct', etl_days=etl_days, stop_days=stop_days)
         insert_products(conn, df_products, container_name)
 
+        # 5. Actuals
+        df_actuals = extract_blobs_date((container_name, sas), 'IRActual', etl_days=etl_days, stop_days=stop_days)
+        insert_actuals_staging(conn, df_actuals, container_name)
+
         print(f"Ingesting {container_name.upper()} data took {round((time() - c_start) / 60)} minutes")
     conn.close()
     duration = time() - START
@@ -63,7 +63,7 @@ def main(etl_days=1, stop_days=-1):
 
 
 if __name__ == '__main__':
-    main()
+    main(1)
 
 
 

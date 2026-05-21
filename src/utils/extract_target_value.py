@@ -2,6 +2,8 @@ import re
 
 
 def get_target_value(target_score):
+    if target_score is None:
+        return  None
     tokens = re.split(r'[\s><=,]+', target_score)
     if len(tokens) > 1:
         # Extract the second token
